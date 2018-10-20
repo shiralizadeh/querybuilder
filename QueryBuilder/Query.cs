@@ -9,6 +9,7 @@ namespace SqlKata
         public bool IsDistinct { get; set; } = false;
         public string QueryAlias { get; set; }
         public string Method { get; set; } = "select";
+        public List<Include> Includes = new List<Include>();
 
         protected List<string> operators = new List<string> {
             "=", "<", ">", "<=", ">=", "<>", "!=", "<=>",
@@ -300,6 +301,44 @@ namespace SqlKata
         public override Query NewQuery()
         {
             return new Query();
+        }
+
+        public Query Include<T>(
+            string prop,
+            Query query = null,
+            string relatedKey = null,
+            string localKey = null
+        )
+        {
+
+            Includes.Add(new Include<T>
+            {
+                Name = prop,
+                Query = query,
+                RelatedKey = relatedKey,
+                LocalKey = localKey
+            });
+
+            return this;
+        }
+
+        public Query Include(
+            string prop,
+            Query query = null,
+            string relatedKey = null,
+            string localKey = null
+        )
+        {
+
+            Includes.Add(new Include
+            {
+                Name = prop,
+                Query = query,
+                RelatedKey = relatedKey,
+                LocalKey = localKey
+            });
+
+            return this;
         }
 
     }
